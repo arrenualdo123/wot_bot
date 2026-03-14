@@ -26,13 +26,18 @@ pipeline {
             }
         }
         stage('SonarQube Analysis') {
-            steps {
-                withSonarQubeEnv('SonarQube') {
-                    // Maven usa automáticamente el plugin de sonar sin configurar .properties
-                    sh 'mvn sonar:sonar -Dsonar.projectKey=wotb_bot -Dsonar.projectName="WOTB Bot Java"'
-                }
-            }
+    steps {
+        // 'SonarQube' es el nombre del servidor en la config global de Jenkins
+        withSonarQubeEnv('SonarQube') { 
+            sh """
+            mvn sonar:sonar \
+              -Dsonar.projectKey=wot_bot \
+              -Dsonar.host.url=http://sonarqube:9000 \
+              -Dsonar.login=${SONAR_TOKEN}
+            """
         }
+    }
+}
         stage('Quality Gate') {
             steps {
                 timeout(time: 5, unit: 'MINUTES') {
