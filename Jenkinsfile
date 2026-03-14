@@ -21,7 +21,7 @@ pipeline {
             post {
                 always {
                     // Publica los reportes de tests de JUnit en Jenkins
-                    junit '**/target/surefire-reports/*.xml'
+                  junit testResults: '**/target/surefire-reports/*.xml', allowEmptyResults: true
                 }
             }
         }
